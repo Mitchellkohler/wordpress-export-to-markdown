@@ -69,7 +69,9 @@ function collectPosts(data, postTypes, config) {
 					title: getPostTitle(post),
 					date: getPostDate(post),
 					categories: getCategories(post),
-					tags: getTags(post)
+					tags: getTags(post),
+					slug: getPostSlug(post),
+					video: listingVideo(post),
 				},
 				content: translator.getPostContent(post, turndownService, config)
 			}));
@@ -107,6 +109,9 @@ function getPostCoverImageId(post) {
 
 function getPostTitle(post) {
 	return post.title[0];
+}
+function listingVideo(post) {
+	return post['listing_video'][0];
 }
 
 function getPostDate(post) {
