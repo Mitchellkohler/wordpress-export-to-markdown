@@ -67,11 +67,18 @@ function collectPosts(data, postTypes, config) {
 				},
 				frontmatter: {
 					title: getPostTitle(post),
+					description: getPostDesc(post),
+					slug: getPostSlug(post),
 					date: getPostDate(post),
+					video: listingVideo(post),
+					windprobability: getWindProb(post),
+					watercondition: getWaterCon(post),
+					locationlat: getLat(post),
+					locationlng: getLng(post),
+					lat: getLat(post),
+  					lng: getLng(post),
 					categories: getCategories(post),
 					tags: getTags(post),
-					slug: getPostSlug(post),
-					video: listingVideo(post),
 				},
 				content: translator.getPostContent(post, turndownService, config)
 			}));
@@ -110,10 +117,62 @@ function getPostCoverImageId(post) {
 function getPostTitle(post) {
 	return post.title[0];
 }
+function getPostDesc(post) {
+	if (post.postmeta === undefined) {
+		return undefined;
+	}
+
+	const postmeta = post.postmeta.find(postmeta => postmeta.meta_key[0] === '_yoast_wpseo_metadesc');
+	const id = postmeta ? postmeta.meta_value[0] : undefined;
+	return id;
+}
 function listingVideo(post) {
-	return post['listing_video'][0];
+	if (post.postmeta === undefined) {
+		return undefined;
+	}
+
+	const postmeta = post.postmeta.find(postmeta => postmeta.meta_key[0] === 'listing_video');
+	const id = postmeta ? postmeta.meta_value[0] : undefined;
+	return id;
 }
 
+function getWindProb(post) {
+	if (post.postmeta === undefined) {
+		return undefined;
+	}
+
+	const postmeta = post.postmeta.find(postmeta => postmeta.meta_key[0] === 'listing_wind_probability');
+	const id = postmeta ? postmeta.meta_value[0] : undefined;
+	return id;
+}
+
+function getWaterCon(post) {
+	if (post.postmeta === undefined) {
+		return undefined;
+	}
+
+	const postmeta = post.postmeta.find(postmeta => postmeta.meta_key[0] === 'listing_watercondition');
+	const id = postmeta ? postmeta.meta_value[0] : undefined;
+	return id;
+}
+function getLat(post) {
+	if (post.postmeta === undefined) {
+		return undefined;
+	}
+
+	const postmeta = post.postmeta.find(postmeta => postmeta.meta_key[0] === 'listing_map_location_latitude');
+	const id = postmeta ? postmeta.meta_value[0] : undefined;
+	return id;
+}
+function getLng(post) {
+	if (post.postmeta === undefined) {
+		return undefined;
+	}
+
+	const postmeta = post.postmeta.find(postmeta => postmeta.meta_key[0] === 'listing_map_location_longitude');
+	const id = postmeta ? postmeta.meta_value[0] : undefined;
+	return id;
+}
 function getPostDate(post) {
 	const dateTime = luxon.DateTime.fromRFC2822(post.pubDate[0], { zone: 'utc' });
 
